@@ -996,8 +996,9 @@ insertafter(Client *a, Client *b)	/* insert a after b in the client list */
 void
 insertbefore(Client *a, Client *b)	/* insert a before b in the client list */
 {
-	Client **x = &clients;
-	
+    Monitor *m;
+	Client **x = &(m->clients);
+
 	while(*x != b && *x)
 		x = & (*x)->next;
 	*x = a;
@@ -1724,13 +1725,16 @@ void
 tilemovemouse(const Arg *arg) {
 	/* Could EnterNotify events be used instead? */
 	Client *c, *d;
+	Monitor *m;
 	XEvent ev;
 	int x, y;
 	Bool after;
 
-	if(!(c = sel))
+	if(!(c = selmon->sel))
 		return;
-	if(c->isfloating || !lt[sellt]->arrange){
+    if (c->isfullscreen) /* no support moving fullscreen windows by mouse */
+        return;
+	if(c->isfloating || m->lt[m->sellt]->arrange){
 		movemouse(NULL);
 		return;
 	}
@@ -1749,13 +1753,13 @@ tilemovemouse(const Arg *arg) {
 			x = ev.xmotion.x;
 			y = ev.xmotion.y;
 			after = False;
-			for(d = nexttiled(clients); d; d = nexttiled(d->next)){
+			for(d = nexttiled(m->clients); d; d = nexttiled(d->next)){
 				if(d == c)
 					after = True;
 				else if(INRECT(x, y, d->x, d->y, d->w+2*borderpx, d->h+2*borderpx)){
 					detach(c);
 					after ? insertafter(c, d) : insertbefore(c,d);
-					arrange();
+					arrange(m);
 					break;
 				}
 			}
@@ -2205,10 +2209,6 @@ main(int argc, char *argv[])
 		die("dwm: cannot open display");
 	checkotherwm();
 	setup();
-#ifdef __OpenBSD__
-	if (pledge("stdio rpath proc exec", NULL) == -1)
-		die("pledge");
-#endif /* __OpenBSD__ */
 	scan();
 	run();
 	cleanup();
