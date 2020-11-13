@@ -2085,7 +2085,7 @@ void
 updatestatus(void)
 {
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
-		strcpy(stext, "argo-dwm "VERSION);
+		strcpy(stext, "dwm-"VERSION);
 	drawbar(selmon);
 }
 
