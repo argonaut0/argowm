@@ -1735,7 +1735,7 @@ tilemovemouse(const Arg *arg) {
 		return;
 	if (c->isfullscreen) /* no support moving fullscreen windows by mouse */
 		return;
-	if(c->isfloating || m->lt[m->sellt]->arrange){
+	if(c->isfloating /*|| m->lt[m->sellt]->arrange*/){
 		movemouse(NULL);
 		return;
 	}
