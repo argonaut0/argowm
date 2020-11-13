@@ -997,7 +997,7 @@ insertafter(Client *a, Client *b)	/* insert a after b in the client list */
 void
 insertbefore(Client *a, Client *b)	/* insert a before b in the client list */
 {
-    Monitor *m;
+    Monitor *m = selmon;
 	Client **x = &(m->clients);
 
 	while(*x != b && *x)
@@ -1726,21 +1726,21 @@ void
 tilemovemouse(const Arg *arg) {
 	/* Could EnterNotify events be used instead? */
 	Client *c, *d;
-	Monitor *m;
+	Monitor *m = selmon;
 	XEvent ev;
 	int x, y;
 	Bool after;
 
 	if(!(c = selmon->sel))
 		return;
-    if (c->isfullscreen) /* no support moving fullscreen windows by mouse */
-        return;
+	if (c->isfullscreen) /* no support moving fullscreen windows by mouse */
+		return;
 	if(c->isfloating || m->lt[m->sellt]->arrange){
 		movemouse(NULL);
 		return;
 	}
 	if(XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
-	None, cursor[CurMove], CurrentTime) != GrabSuccess)
+	None, cursor[CurMove]->cursor, CurrentTime) != GrabSuccess)
 		return;
 	do {
 		XMaskEvent(dpy, MOUSEMASK|ExposureMask|SubstructureRedirectMask, &ev);
