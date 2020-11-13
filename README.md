@@ -1,6 +1,17 @@
+## Switch to dev branch for most changes!
+
+### Notes:
+- base dwm 6.2
+- Tile Move Mouse patch updated ish
+- probably other stuff, master won't be merged until i'm absolutely sure nothing is broken
+
+
+
 dwm - dynamic window manager
 ============================
 dwm is an extremely fast, small, and dynamic window manager for X.
+
+
 
 
 Requirements
